@@ -1,0 +1,6 @@
+{
+  "name": "vitty-ai-cc",
+  "version": "0.3.0",
+  "description": "Vitty.ai CC: company-wide policy hooks for Claude Code (calls the Vitty MCP start/stop tools).",
+  "author": { "name": "Vitty.ai" }
+}

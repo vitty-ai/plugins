@@ -1,0 +1,12 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      { "hooks": [ { "type": "mcp_tool", "server": "plugin:vitty-ai-cc:vitty", "tool": "start",
+          "input": { "message": "${prompt}", "session_id": "${session_id}", "folder": "${cwd}", "client": "claude-code" } } ] }
+    ],
+    "Stop": [
+      { "hooks": [ { "type": "mcp_tool", "server": "plugin:vitty-ai-cc:vitty", "tool": "stop",
+          "input": { "message": "${last_assistant_message}", "session_id": "${session_id}", "client": "claude-code" } } ] }
+    ]
+  }
+}

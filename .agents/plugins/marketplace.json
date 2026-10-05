@@ -1,0 +1,12 @@
+{
+  "name": "vitty-ai",
+  "interface": { "displayName": "Vitty.ai" },
+  "plugins": [
+    {
+      "name": "vitty-ai-codex",
+      "source": { "source": "local", "path": "./plugins/vitty-ai-codex" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Engineering"
+    }
+  ]
+}

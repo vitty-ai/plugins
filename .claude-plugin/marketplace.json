@@ -1,0 +1,7 @@
+{
+  "name": "vitty-ai",
+  "owner": { "name": "Vitty.ai" },
+  "plugins": [
+    { "name": "vitty-ai-cc", "source": "./plugins/vitty-ai-cc", "description": "Vitty.ai CC policy hooks" }
+  ]
+}
