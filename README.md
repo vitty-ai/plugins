@@ -21,8 +21,9 @@ to the Vitty server and runs two hooks on every message: `start` when you send a
    ```
 
    A GitHub SSH key loaded in `ssh-agent` also works.
-4. Set `VITTY_STAFF` to your staff name, exactly as an admin added you to the server. The plugin
-   sends it with every message, so the server knows who is asking. Add this line to `~/.zshrc` or
+4. Not needed yet; skip this until staff access is turned on. Then, set `VITTY_STAFF` to your staff
+   name, exactly as an admin added you to the server. The plugin sends it with every message, so the
+   server knows who is asking. Add this line to `~/.zshrc` or
    `~/.bashrc` (with your own name), then open a new terminal:
 
    ```bash
@@ -36,7 +37,7 @@ to the Vitty server and runs two hooks on every message: `start` when you send a
    { "env": { "VITTY_STAFF": "alice" } }
    ```
 
-   If the name is missing or wrong, the server records nothing for your messages and tells you why.
+   The plugins work without it.
 
 ### 2. Claude Code
 
@@ -95,7 +96,8 @@ and run the add command again.
 - Both plugins use native `mcp_tool` hooks (UserPromptSubmit runs `start`, Stop runs `stop`) against
   the server in the plugin's `.mcp.json`. The tool's return value is the hook output.
 - Staff name: both plugins send `X-Vitty-Staff` from the person's `VITTY_STAFF` env var. An admin must
-  first add each person as a row in `agent.staff` on the server, with the same name. Until sign-in
+  first add each person as a row in `agent.staff` on the server, with the same name. Optional for now
+  (5 Oct 2026): the server doesn't require it while staff access isn't being tested. Until sign-in
   exists the server trusts this header, so anyone can claim any staff name.
   - Claude Code: `"headers"` with `${VITTY_STAFF:-}`. The empty default keeps the server loading when
     the variable is unset; the server then replies that no name was sent.
