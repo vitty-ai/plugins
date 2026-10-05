@@ -91,7 +91,7 @@ and run the add command again.
 
 - Marketplaces: `.claude-plugin/marketplace.json` (Claude Code), `.agents/plugins/marketplace.json` (Codex).
 - Server URL:
-  - Claude Code: `VITTY_MCP_URL` env var (default `http://127.0.0.1:8000/mcp`), set in the shell that launches `claude`.
+  - Claude Code: `VITTY_MCP_URL` env var (default `https://gateway-130321581049.asia-south1.run.app/mcp`), set in the shell that launches `claude`.
   - Codex: `.mcp.json` does not expand env vars, so the URL is hardcoded in `plugins/vitty-ai-codex/.mcp.json`.
 - Both plugins use native `mcp_tool` hooks (UserPromptSubmit runs `start`, Stop runs `stop`) against
   the server in the plugin's `.mcp.json`. The tool's return value is the hook output.
