@@ -21,6 +21,22 @@ to the Vitty server and runs two hooks on every message: `start` when you send a
    ```
 
    A GitHub SSH key loaded in `ssh-agent` also works.
+4. Set `VITTY_STAFF` to your staff name, exactly as an admin added you to the server. The plugin
+   sends it with every message, so the server knows who is asking. Add this line to `~/.zshrc` or
+   `~/.bashrc` (with your own name), then open a new terminal:
+
+   ```bash
+   export VITTY_STAFF=alice
+   ```
+
+   If you start Claude Code from the desktop app or an IDE rather than a terminal, put it in
+   `~/.claude/settings.json` instead:
+
+   ```json
+   { "env": { "VITTY_STAFF": "alice" } }
+   ```
+
+   If the name is missing or wrong, the server records nothing for your messages and tells you why.
 
 ### 2. Claude Code
 
@@ -78,6 +94,13 @@ and run the add command again.
   - Codex: `.mcp.json` does not expand env vars, so the URL is hardcoded in `plugins/vitty-ai-codex/.mcp.json`.
 - Both plugins use native `mcp_tool` hooks (UserPromptSubmit runs `start`, Stop runs `stop`) against
   the server in the plugin's `.mcp.json`. The tool's return value is the hook output.
+- Staff name: both plugins send `X-Vitty-Staff` from the person's `VITTY_STAFF` env var. An admin must
+  first add each person as a row in `agent.staff` on the server, with the same name. Until sign-in
+  exists the server trusts this header, so anyone can claim any staff name.
+  - Claude Code: `"headers"` with `${VITTY_STAFF:-}`. The empty default keeps the server loading when
+    the variable is unset; the server then replies that no name was sent.
+  - Codex: `"env_http_headers"`, whose value is the env var's name, not `${...}`. Codex documents this
+    field for `config.toml`; whether it works in a plugin's own MCP file is not confirmed yet.
 - Bump the plugin `version` on every change, otherwise installed copies won't update.
 - Every staff member who installs a plugin can read all of its files, so never put keys or secrets here.
 - The server lives in `vitty-ai/mcp-plugins`. Staff don't need access to it.

@@ -1,5 +1,9 @@
 {
   "mcpServers": {
-    "vitty": { "type": "http", "url": "${VITTY_MCP_URL:-http://127.0.0.1:8000/mcp}" }
+    "vitty": {
+      "type": "http",
+      "url": "${VITTY_MCP_URL:-http://127.0.0.1:8000/mcp}",
+      "headers": { "X-Vitty-Staff": "${VITTY_STAFF:-}" }
+    }
   }
 }
