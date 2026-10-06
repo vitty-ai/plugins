@@ -93,6 +93,10 @@ and run the add command again.
 - Server URL:
   - Claude Code: `VITTY_MCP_URL` env var (default `https://gateway-130321581049.asia-south1.run.app/mcp`), set in the shell that launches `claude`.
   - Codex: `.mcp.json` does not expand env vars, so the URL is hardcoded in `plugins/vitty-ai-codex/.mcp.json`.
+- Plans: the Claude Code plugin also has a before-tool hook (`hooks/plan-file.mjs`, run with `node`). When the
+  agent hands in a plan to `delegate` as `plan_file` (a `.md` file inside the working folder), the hook reads the
+  file into `plan` before the call is sent, so the server stores the file's own words. The Codex plugin doesn't have
+  it yet.
 - Both plugins use native `mcp_tool` hooks (UserPromptSubmit runs `start`, Stop runs `stop`) against
   the server in the plugin's `.mcp.json`. The tool's return value is the hook output.
 - Staff name: both plugins send `X-Vitty-Staff` from the person's `VITTY_STAFF` env var. An admin must
