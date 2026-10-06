@@ -22,23 +22,8 @@ The plugins hold no server code.
    ```
 
    A GitHub SSH key loaded in `ssh-agent` also works.
-4. Not needed yet; skip this until staff access is turned on. Then, set `VITTY_STAFF` to your staff
-   name, exactly as an admin added you to the server. The plugin sends it with every message, so the
-   server knows who is asking. Add this line to `~/.zshrc` or
-   `~/.bashrc` (with your own name), then open a new terminal:
-
-   ```bash
-   export VITTY_STAFF=alice
-   ```
-
-   If you start Claude Code from the desktop app or an IDE rather than a terminal, put it in
-   `~/.claude/settings.json` instead:
-
-   ```json
-   { "env": { "VITTY_STAFF": "alice" } }
-   ```
-
-   The plugins work without it.
+4. Ask an admin to add your Google Workspace address (`you@vitty.ai`) to your staff row on the server.
+   You sign in with it once in each app, below.
 
 ### 2. Claude Code
 
@@ -64,6 +49,9 @@ The plugins hold no server code.
    `vitty-ai-cc@vitty-ai` should show `Status: ✔ enabled`.
 4. Turn on automatic updates: in a Claude Code session, run `/plugin`, open **Marketplaces**, select
    `vitty-ai`, and choose **Enable auto-update**.
+5. Sign in: in a Claude Code session, run `/mcp`, select `plugin:vitty-ai-cc:vitty` and choose
+   **Authenticate**. Your browser opens Google; pick your `vitty.ai` account. Claude Code keeps you signed
+   in from then on. Until you sign in, the hooks do nothing and the Vitty tools are missing.
 
 If the download fails on a machine with no GitHub SSH key, set `CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1`
 and run the add command again.
@@ -81,7 +69,9 @@ and run the add command again.
 3. Trust the plugin's hooks. Codex skips hooks that come with a plugin until you approve them. Run
    `/hooks`, review the four Vitty hooks (two `start`, one `stop`, and one that reads a plan file into `delegate`)
    and trust them. If a later update changes a hook, Codex asks you to review it again.
-4. Restart Codex.
+4. Sign in: run `codex mcp login vitty`. Your browser opens Google; pick your `vitty.ai` account.
+   Codex keeps you signed in from then on.
+5. Restart Codex.
 
 ### Updating
 
@@ -111,14 +101,12 @@ and run the add command again.
     session's open tasks again, because compaction drops the workflow text it handed down.
   - Stop runs `stop`. After a compaction it holds the reply until each working task's workflow has
     been handed down again.
-- Staff name: both plugins send `X-Vitty-Staff` from the person's `VITTY_STAFF` env var. An admin must
-  first add each person as a row in `agent.staff` on the server, with the same name. Optional for now
-  (5 Oct 2026): the server doesn't require it while staff access isn't being tested. Until sign-in
-  exists the server trusts this header, so anyone can claim any staff name.
-  - Claude Code: `"headers"` with `${VITTY_STAFF:-}`. The empty default keeps the server loading when
-    the variable is unset; the server then replies that no name was sent.
-  - Codex: `"env_http_headers"`, whose value is the env var's name, not `${...}`. Codex documents this
-    field for `config.toml`; whether it works in a plugin's own MCP file is not confirmed yet.
+- Sign-in: the server is its own OAuth sign-in service and sends the person to Google for the login. It
+  accepts a verified Workspace address that is some staff member's email on the server. Claude Code and Codex
+  register themselves, keep the tokens and send them on every call, hooks included, so the plugins carry no
+  name, key or header. An mcp_tool hook never starts a sign-in: the person signs in once with `/mcp`
+  (Claude Code) or `codex mcp login vitty` (Codex). Whether `codex mcp login` reaches a server defined in a
+  plugin is not confirmed yet.
 - Bump the plugin `version` on every change, otherwise installed copies won't update.
 - Every staff member who installs a plugin can read all of its files, so never put keys or secrets here.
 - The server lives in `vitty-ai/mcp`. Staff don't need access to it.

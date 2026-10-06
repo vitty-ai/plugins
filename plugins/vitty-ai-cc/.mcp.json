@@ -2,8 +2,7 @@
   "mcpServers": {
     "vitty": {
       "type": "http",
-      "url": "${VITTY_MCP_URL:-https://gateway-130321581049.asia-south1.run.app/mcp}",
-      "headers": { "X-Vitty-Staff": "${VITTY_STAFF:-}" }
+      "url": "${VITTY_MCP_URL:-https://gateway-130321581049.asia-south1.run.app/mcp}"
     }
   }
 }
