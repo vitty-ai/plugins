@@ -1,8 +1,9 @@
 # Vitty.ai plugins
 
 Claude Code and Codex plugins for Vitty.ai staff. Each plugin connects your Claude Code or Codex
-to the Vitty server and runs two hooks on every message: `start` when you send a message, and
-`stop` when the AI finishes its reply. The plugins hold no server code.
+to the Vitty server. Its hooks run `start` when you send a message (also one you type while the AI is
+working) and again after the conversation is compacted, and `stop` when the AI finishes its reply.
+The plugins hold no server code.
 
 - `plugins/vitty-ai-cc`: the Claude Code plugin
 - `plugins/vitty-ai-codex`: the Codex plugin
@@ -77,7 +78,7 @@ and run the add command again.
 
 2. Start Codex, run `/plugins`, pick the `vitty-ai` marketplace and install **vitty-ai-codex**.
 3. Trust the plugin's hooks. Codex skips hooks that come with a plugin until you approve them. Run
-   `/hooks`, review the two Vitty hooks (`start` and `stop`) and trust them. If a later update
+   `/hooks`, review the three Vitty hooks (two `start`, one `stop`) and trust them. If a later update
    changes a hook, Codex asks you to review it again.
 4. Restart Codex.
 
@@ -97,8 +98,14 @@ and run the add command again.
   agent hands in a plan to `delegate` as `plan_file` (a `.md` file inside the working folder), the hook reads the
   file into `plan` before the call is sent, so the server stores the file's own words. The Codex plugin doesn't have
   it yet.
-- Both plugins use native `mcp_tool` hooks (UserPromptSubmit runs `start`, Stop runs `stop`) against
-  the server in the plugin's `.mcp.json`. The tool's return value is the hook output.
+- Both plugins use native `mcp_tool` hooks against the server in the plugin's `.mcp.json`. The tool's
+  return value is the hook output.
+  - UserPromptSubmit runs `start` with the message. It also fires for a message typed while the AI is
+    working (tested on Claude Code 2.1.291, 6 Oct 2026; Codex source).
+  - SessionStart with matcher `compact` runs `start` with `event: "compact"`: the server lists the
+    session's open tasks again, because compaction drops the workflow text it handed down.
+  - Stop runs `stop`. After a compaction it holds the reply until each working task's workflow has
+    been handed down again.
 - Staff name: both plugins send `X-Vitty-Staff` from the person's `VITTY_STAFF` env var. An admin must
   first add each person as a row in `agent.staff` on the server, with the same name. Optional for now
   (5 Oct 2026): the server doesn't require it while staff access isn't being tested. Until sign-in

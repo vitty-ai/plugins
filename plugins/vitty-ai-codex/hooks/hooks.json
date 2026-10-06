@@ -4,6 +4,10 @@
       { "hooks": [ { "type": "mcp_tool", "server": "vitty", "tool": "start",
           "input": { "message": "${prompt}", "session_id": "${session_id}", "folder": "${cwd}", "client": "codex" } } ] }
     ],
+    "SessionStart": [
+      { "matcher": "compact", "hooks": [ { "type": "mcp_tool", "server": "vitty", "tool": "start",
+          "input": { "event": "compact", "session_id": "${session_id}", "folder": "${cwd}", "client": "codex" } } ] }
+    ],
     "Stop": [
       { "hooks": [ { "type": "mcp_tool", "server": "vitty", "tool": "stop",
           "input": { "message": "${last_assistant_message}", "session_id": "${session_id}", "client": "codex" } } ] }
