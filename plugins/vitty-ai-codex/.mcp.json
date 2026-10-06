@@ -3,7 +3,20 @@
     "vitty": {
       "type": "http",
       "url": "https://gateway-130321581049.asia-south1.run.app/mcp",
-      "env_http_headers": { "X-Vitty-Staff": "VITTY_STAFF" }
+      "env_http_headers": {
+        "X-Vitty-Staff": "VITTY_STAFF"
+      },
+      "tools": {
+        "collaborate": {
+          "output_token_limit": 50000
+        },
+        "delegate": {
+          "output_token_limit": 50000
+        },
+        "retrieve": {
+          "output_token_limit": 50000
+        }
+      }
     }
   }
 }

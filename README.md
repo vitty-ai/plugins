@@ -76,10 +76,11 @@ and run the add command again.
    codex plugin marketplace add vitty-ai/plugins
    ```
 
+   Codex 0.152.0 or later is needed for the plugin's answer-size setting (`codex --version`).
 2. Start Codex, run `/plugins`, pick the `vitty-ai` marketplace and install **vitty-ai-codex**.
 3. Trust the plugin's hooks. Codex skips hooks that come with a plugin until you approve them. Run
-   `/hooks`, review the three Vitty hooks (two `start`, one `stop`) and trust them. If a later update
-   changes a hook, Codex asks you to review it again.
+   `/hooks`, review the four Vitty hooks (two `start`, one `stop`, and one that reads a plan file into `delegate`)
+   and trust them. If a later update changes a hook, Codex asks you to review it again.
 4. Restart Codex.
 
 ### Updating
@@ -94,10 +95,14 @@ and run the add command again.
 - Server URL:
   - Claude Code: `VITTY_MCP_URL` env var (default `https://gateway-130321581049.asia-south1.run.app/mcp`), set in the shell that launches `claude`.
   - Codex: `.mcp.json` does not expand env vars, so the URL is hardcoded in `plugins/vitty-ai-codex/.mcp.json`.
-- Plans: the Claude Code plugin also has a before-tool hook (`hooks/plan-file.mjs`, run with `node`). When the
-  agent hands in a plan to `delegate` as `plan_file` (a `.md` file inside the working folder), the hook reads the
-  file into `plan` before the call is sent, so the server stores the file's own words. The Codex plugin doesn't have
-  it yet.
+- Plans: both plugins have a before-tool hook (`hooks/plan-file.mjs`, run with `node`). When the agent hands in a
+  plan to `delegate` as `plan_file` (a `.md` file inside the working folder), the hook reads the file into `plan`
+  before the call is sent, so the server stores the file's own words. Codex accepts a rewritten call only with
+  `permissionDecision: "allow"`, so its copy adds that; Claude Code's does not, so its permission prompt stays.
+- Answer size: Codex cuts a tool's answer at about 10,000 tokens by default. The Codex plugin raises it to 50,000
+  tokens for `collaborate`, `delegate` and `retrieve` (`tools.<tool>.output_token_limit` in `.mcp.json`; Codex
+  0.152.0 or later; a person's own config can only lower it). Claude Code's limit is raised by the server, which
+  marks those tools with `anthropic/maxResultSizeChars`.
 - Both plugins use native `mcp_tool` hooks against the server in the plugin's `.mcp.json`. The tool's
   return value is the hook output.
   - UserPromptSubmit runs `start` with the message. It also fires for a message typed while the AI is
