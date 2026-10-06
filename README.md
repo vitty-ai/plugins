@@ -12,7 +12,7 @@ The plugins hold no server code.
 
 ### 1. Before you start (once)
 
-1. Ask an admin to give your GitHub account read access to `vitty-ai/vitty-plugins`.
+1. Ask an admin to give your GitHub account read access to `vitty-ai/plugins`.
 2. Install `git` and the GitHub CLI (`gh`).
 3. Sign git in to GitHub, so Claude Code and Codex can download this private repo without asking for a password:
 
@@ -45,7 +45,7 @@ The plugins hold no server code.
 1. Add the Vitty marketplace (the catalog of our plugins):
 
    ```bash
-   claude plugin marketplace add vitty-ai/vitty-plugins
+   claude plugin marketplace add vitty-ai/plugins
    ```
 
    It should print `Successfully added marketplace: vitty-ai`.
@@ -73,7 +73,7 @@ and run the add command again.
 1. Add the Vitty marketplace:
 
    ```bash
-   codex plugin marketplace add vitty-ai/vitty-plugins
+   codex plugin marketplace add vitty-ai/plugins
    ```
 
 2. Start Codex, run `/plugins`, pick the `vitty-ai` marketplace and install **vitty-ai-codex**.
@@ -116,4 +116,4 @@ and run the add command again.
     field for `config.toml`; whether it works in a plugin's own MCP file is not confirmed yet.
 - Bump the plugin `version` on every change, otherwise installed copies won't update.
 - Every staff member who installs a plugin can read all of its files, so never put keys or secrets here.
-- The server lives in `vitty-ai/mcp-plugins`. Staff don't need access to it.
+- The server lives in `vitty-ai/mcp`. Staff don't need access to it.
