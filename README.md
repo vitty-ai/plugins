@@ -99,8 +99,8 @@ and run the add command again.
     working (tested on Claude Code 2.1.291, 6 Oct 2026; Codex source).
   - SessionStart with matcher `compact` runs `start` with `event: "compact"`: the server lists the
     session's open tasks again, because compaction drops the workflow text it handed down.
-  - Stop runs `stop`. After a compaction it holds the reply until each working task's workflow has
-    been handed down again.
+  - Stop runs `stop`. It holds the reply while a working task has a check without an accepted result, and
+    after a compaction until each working task's workflow has been handed down again.
 - Sign-in: the server is its own OAuth sign-in service and sends the person to Google for the login. It
   accepts a verified Workspace address that is some staff member's email on the server. Claude Code and Codex
   register themselves, keep the tokens and send them on every call, hooks included, so the plugins carry no
