@@ -1,6 +1,6 @@
 {
   "name": "vitty-ai",
-  "interface": { "displayName": "Vitty.ai" },
+  "interface": { "displayName": "Vitty" },
   "plugins": [
     {
       "name": "vitty-ai-codex",

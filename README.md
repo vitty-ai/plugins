@@ -1,6 +1,6 @@
-# Vitty.ai plugins
+# Vitty plugins
 
-Claude Code and Codex plugins for Vitty.ai staff. Each plugin connects your Claude Code or Codex
+Claude Code and Codex plugins for Vitty staff. Each plugin connects your Claude Code or Codex
 to the Vitty server. Its hooks run `start` when you send a message (also one you type while the AI is
 working) and again after the conversation is compacted, and `stop` when the AI finishes its reply.
 The plugins hold no server code.
