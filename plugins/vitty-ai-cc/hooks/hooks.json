@@ -5,8 +5,8 @@
           "input": { "message": "${prompt}", "session_id": "${session_id}", "folder": "${cwd}", "client": "claude-code" } } ] }
     ],
     "PreToolUse": [
-      { "matcher": "mcp__.*vitty.*__delegate",
-        "hooks": [ { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/plan-file.mjs\"" } ] }
+      { "matcher": "mcp__.*vitty.*__(retrieve|collaborate|delegate|calibrate|submit_validation_result)",
+        "hooks": [ { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/before-tool.mjs\"" } ] }
     ],
     "SessionStart": [
       { "matcher": "compact", "hooks": [ { "type": "mcp_tool", "server": "plugin:vitty-ai-cc:vitty", "tool": "start",
