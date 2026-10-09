@@ -67,8 +67,8 @@ and run the add command again.
    Codex 0.152.0 or later is needed for the plugin's answer-size setting (`codex --version`).
 2. Start Codex, run `/plugins`, pick the `vitty-ai` marketplace and install **vitty-ai-codex**.
 3. Trust the plugin's hooks. Codex skips hooks that come with a plugin until you approve them. Run
-   `/hooks`, review the four Vitty hooks (two `start`, one `stop`, and one before each Vitty tool call that adds the session
-   and reads a plan file into `delegate`)
+   `/hooks`, review the five Vitty hooks (two `start`, one `stop`, one before each Vitty tool call that adds the session
+   and reads a plan file into `delegate`, and one `before_tool` before every shell, patch and other MCP call)
    and trust them. If a later update changes a hook, Codex asks you to review it again.
 4. Sign in: run `codex mcp login vitty`. Your browser opens Google; pick your `vitty.ai` account.
    Codex keeps you signed in from then on.
@@ -94,6 +94,15 @@ and run the add command again.
   hook does both, since two hooks on one tool cannot both rewrite its input. Codex accepts a rewritten call only
   with `permissionDecision: "allow"`, so its copy adds that, and Codex asks no permission for these tools; Claude
   Code's does not, so its permission prompt stays.
+- Before-tool check (draft, 9 Oct 2026): a second before-tool hook, an `mcp_tool` hook on the server's `before_tool`,
+  sends the session id, the tool's name and its input before every call that can change something: Claude Code's
+  `Bash`, `Edit`, `Write`, `NotebookEdit` and every MCP tool but Vitty's; Codex's `Bash` (its shell, which it also
+  reads files with), `apply_patch` and every MCP tool (Codex's matcher cannot leave Vitty's out, so the server lets
+  them through at once). File reads (`Read`, `Grep`, `Glob`) never reach the server. The server lets plain read
+  commands through, and has its small model judge the rest against the task's workflow; it denies a call that changes
+  something outside the workflow, and the host shows the agent the reason. Neither host gives a hook the text the agent
+  wrote before the call, so that text never reaches the server. The hook waits at most 30 seconds; past that, or on
+  any error, both hosts let the call through.
 - Answer size: Codex cuts a tool's answer at about 10,000 tokens by default. The Codex plugin raises it to 50,000
   tokens for `collaborate`, `delegate` and `retrieve` (`tools.<tool>.output_token_limit` in `.mcp.json`; Codex
   0.152.0 or later; a person's own config can only lower it). Claude Code's limit is raised by the server, which

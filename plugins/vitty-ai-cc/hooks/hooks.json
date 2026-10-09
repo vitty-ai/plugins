@@ -6,7 +6,10 @@
     ],
     "PreToolUse": [
       { "matcher": "mcp__.*vitty.*__(retrieve|collaborate|delegate|calibrate|submit_validation_result)",
-        "hooks": [ { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/before-tool.mjs\"" } ] }
+        "hooks": [ { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/before-tool.mjs\"" } ] },
+      { "matcher": "^(Bash|Edit|Write|NotebookEdit|mcp__(?!.*vitty).*)$",
+        "hooks": [ { "type": "mcp_tool", "server": "plugin:vitty-ai-cc:vitty", "tool": "before_tool", "timeout": 30,
+          "input": { "session_id": "${session_id}", "tool_name": "${tool_name}", "tool_input": "${tool_input}" } } ] }
     ],
     "SessionStart": [
       { "matcher": "compact", "hooks": [ { "type": "mcp_tool", "server": "plugin:vitty-ai-cc:vitty", "tool": "start",
