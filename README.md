@@ -67,8 +67,8 @@ and run the add command again.
    Codex 0.152.0 or later is needed for the plugin's answer-size setting (`codex --version`).
 2. Start Codex, run `/plugins`, pick the `vitty-ai` marketplace and install **vitty-ai-codex**.
 3. Trust the plugin's hooks. Codex skips hooks that come with a plugin until you approve them. Run
-   `/hooks`, review the four Vitty hooks (two `start`, one `stop`, and one before each Vitty tool call that adds the session
-   and reads a plan file into `delegate`)
+   `/hooks`, review the five Vitty hooks (two `start`, one `stop`, one before each Vitty tool call that adds the session
+   and reads a plan file into `delegate`, and the first-call gate before every shell, patch and other MCP call)
    and trust them. If a later update changes a hook, Codex asks you to review it again.
 4. Sign in: run `codex mcp login vitty`. Your browser opens Google; pick your `vitty.ai` account.
    Codex keeps you signed in from then on.
@@ -94,6 +94,15 @@ and run the add command again.
   hook does both, since two hooks on one tool cannot both rewrite its input. Codex accepts a rewritten call only
   with `permissionDecision: "allow"`, so its copy adds that, and Codex asks no permission for these tools; Claude
   Code's does not, so its permission prompt stays.
+- First-call gate (experiment, 9 Oct 2026): a second before-tool hook, `hooks/first-call-gate.mjs`, run with `node`,
+  on Claude Code's `Bash`, `Edit`, `Write`, `NotebookEdit` and every MCP tool but Vitty's, and on Codex's `Bash`,
+  `apply_patch` and every MCP tool. A shell command that is only plain reads (`ls`, `cat`, `grep`, `rg`, `find` without
+  `-exec` or `-delete`, `sed -n` that only prints, `git ls-files` and the like, joined by `&&`, `||`, `;` or `|`) and
+  Vitty's own tools go through. Any other call is denied on its first attempt with a message asking the agent to check
+  the steps of its workflows, and a hash of the call is kept in a file under the system temp folder, per session. The
+  exact same call retried then goes through once; the next attempt is asked again. No server or model call; any error
+  lets the call through. Turn it off with `VITTY_FIRST_CALL_GATE=off` in the environment (restart the app), or remove its
+  entry from `hooks/hooks.json`. Tests: `node --test` from the repository root.
 - Answer size: Codex cuts a tool's answer at about 10,000 tokens by default. The Codex plugin raises it to 50,000
   tokens for `collaborate`, `delegate` and `retrieve` (`tools.<tool>.output_token_limit` in `.mcp.json`; Codex
   0.152.0 or later; a person's own config can only lower it). Claude Code's limit is raised by the server, which
