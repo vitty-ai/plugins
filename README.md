@@ -90,8 +90,10 @@ and run the add command again.
   delegate, calibrate and submit_validation_result. It adds the host's `session_id` to every call, so the server
   knows the session and finds a task by its number in it; the server refuses a call without it (plugins before
   Claude Code 0.8.0 and Codex 0.9.0). Before `delegate`, when the agent hands in a plan as `plan_file` (a `.md` file
-  inside the working folder), it also reads the file into `plan`, so the server stores the file's own words. One
-  hook does both, since two hooks on one tool cannot both rewrite its input. Codex accepts a rewritten call only
+  inside the working folder), it also reads the file into `plan`, so the server stores the file's own words. Before
+  `calibrate`, it sets `test` to whether `VITTY_TEST=1` is set where the host runs, whatever the agent sent: the
+  server keeps a test session's changes off Brain's main (Claude Code 0.8.2, Codex 0.9.1). One
+  hook does all of this, since two hooks on one tool cannot both rewrite its input. Codex accepts a rewritten call only
   with `permissionDecision: "allow"`, so its copy adds that, and Codex asks no permission for these tools; Claude
   Code's does not, so its permission prompt stays.
 - Answer size: Codex cuts a tool's answer at about 10,000 tokens by default. The Codex plugin raises it to 50,000

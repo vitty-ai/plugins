@@ -2,7 +2,8 @@
 // task by its number in it. Before delegate, also: when the hand-in names a plan_file, put that file's
 // text into `plan`, so the server stores the file's own words and the agent never retypes the plan. The
 // file must be a .md file inside the working folder. One hook does both, since two hooks on one tool
-// cannot both rewrite its input. Node built-ins only.
+// cannot both rewrite its input. Before calibrate, also: say whether this is a test session (VITTY_TEST=1 where
+// the host runs), so the server keeps a test's changes off Brain's main. Node built-ins only.
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -27,5 +28,7 @@ if (/__delegate$/.test(input.tool_name ?? '') && result && typeof result === 'ob
   if (!plan.trim()) deny(`The plan file ${result.plan_file} is empty.`);
   args = { ...args, result: { ...result, plan_file: inside.split(path.sep).join('/'), plan } };
 }
+
+if (/__calibrate$/.test(input.tool_name ?? '')) args = { ...args, test: process.env.VITTY_TEST === '1' };
 
 console.log(JSON.stringify({ hookSpecificOutput: { hookEventName: 'PreToolUse', updatedInput: args } }));
