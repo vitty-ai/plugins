@@ -1,13 +1,13 @@
 {
-  "name": "vitty-ai-codex",
-  "version": "0.9.0",
-  "description": "Vitty: company-wide policy hooks for Codex (calls Vitty's start and stop tools).",
+  "name": "vitty",
+  "version": "0.10.0",
+  "description": "Vitty: company-wide policy hooks (calls Vitty's start and stop tools).",
   "author": { "name": "Vitty" },
   "mcpServers": "./.mcp.json",
   "hooks": "./hooks/hooks.json",
   "interface": {
     "displayName": "Vitty",
-    "shortDescription": "Company-wide policy hooks for Codex",
+    "shortDescription": "Company-wide policy hooks",
     "developerName": "Vitty",
     "brandColor": "#734012",
     "composerIcon": "./assets/icon.png",

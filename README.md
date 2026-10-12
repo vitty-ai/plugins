@@ -5,8 +5,10 @@ to the Vitty server. Its hooks run `start` when you send a message (also one you
 working) and again after the conversation is compacted, and `stop` when the AI finishes its reply.
 The plugins hold no server code.
 
-- `plugins/vitty-ai-cc`: the Claude Code plugin
-- `plugins/vitty-ai-codex`: the Codex plugin
+- `plugins/claude-code`: the Claude Code plugin
+- `plugins/codex`: the Codex plugin
+
+Both plugins are named `vitty`, with the same description and logo, and come from the marketplace `vitty-ai`.
 
 ## Install
 
@@ -37,7 +39,7 @@ The plugins hold no server code.
 2. Install the plugin:
 
    ```bash
-   claude plugin install vitty-ai-cc@vitty-ai
+   claude plugin install vitty
    ```
 
 3. Check it loaded:
@@ -46,10 +48,10 @@ The plugins hold no server code.
    claude plugin list
    ```
 
-   `vitty-ai-cc@vitty-ai` should show `Status: ✔ enabled`.
+   `vitty@vitty-ai` should show `Status: ✔ enabled`.
 4. Turn on automatic updates: in a Claude Code session, run `/plugin`, open **Marketplaces**, select
    `vitty-ai`, and choose **Enable auto-update**.
-5. Sign in: in a Claude Code session, run `/mcp`, select `plugin:vitty-ai-cc:vitty` and choose
+5. Sign in: in a Claude Code session, run `/mcp`, select `plugin:vitty:vitty` and choose
    **Authenticate**. Your browser opens Google; pick your `vitty.ai` account. Claude Code keeps you signed
    in from then on. Until you sign in, the hooks do nothing and the Vitty tools are missing.
 
@@ -65,7 +67,7 @@ and run the add command again.
    ```
 
    Codex 0.152.0 or later is needed for the plugin's answer-size setting (`codex --version`).
-2. Start Codex, run `/plugins`, pick the `vitty-ai` marketplace and install **vitty-ai-codex**.
+2. Start Codex, run `/plugins`, pick the `vitty-ai` marketplace and install **Vitty** (`vitty`).
 3. Trust the plugin's hooks. Codex skips hooks that come with a plugin until you approve them. Run
    `/hooks`, review the four Vitty hooks (two `start`, one `stop`, and one before each Vitty tool call that adds the session
    and reads a plan file into `delegate`)
@@ -73,6 +75,14 @@ and run the add command again.
 4. Sign in: run `codex mcp login vitty`. Your browser opens Google; pick your `vitty.ai` account.
    Codex keeps you signed in from then on.
 5. Restart Codex.
+
+### Moving from the old names
+
+Before 0.10.0 the plugins were named `vitty-ai-cc` (Claude Code) and `vitty-ai-codex` (Codex).
+
+- Claude Code: after the marketplace updates, the old plugin stops loading. Run `claude plugin install vitty`
+  once, then sign in again with `/mcp` under `plugin:vitty:vitty`.
+- Codex: in `/plugins`, uninstall `vitty-ai-codex` and install `vitty`, then trust its hooks again in `/hooks`.
 
 ### Updating
 
@@ -83,6 +93,9 @@ and run the add command again.
 ## For maintainers
 
 - Marketplaces: `.claude-plugin/marketplace.json` (Claude Code), `.agents/plugins/marketplace.json` (Codex).
+- Name, description and logo are the same in both plugins. Claude Code shows no plugin logo; its `icon`
+  field is read only by Anthropic's plugin directory. A Claude Code rename goes in the marketplace's `renames`
+  map, which keeps every old name; Codex has no rename field, so its users reinstall.
 - Server URL: both plugins write the gateway's `/mcp` address in their `.mcp.json`, with no env var. The Claude
   desktop app signs in to an org-installed plugin's server only when the session's copy of the plugin has the same
   address as the org copy, and an env var on one machine made the two differ.

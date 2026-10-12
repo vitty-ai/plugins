@@ -1,0 +1,8 @@
+{
+  "name": "vitty",
+  "displayName": "Vitty",
+  "version": "0.10.0",
+  "description": "Vitty: company-wide policy hooks (calls Vitty's start and stop tools).",
+  "author": { "name": "Vitty" },
+  "icon": "./assets/logo.png"
+}
