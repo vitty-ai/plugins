@@ -103,8 +103,8 @@ and run the add command again.
   - UserPromptSubmit runs `start` with the message. It also fires for a message typed while the AI is
     working (tested on Claude Code 2.1.291, 6 Oct 2026; Codex source).
   - SessionStart with matcher `startup|resume|clear|compact` runs `start` with the source as `event`. It carries
-    what the agent needs once per conversation: who the person is, the guide to the Vitty tools and their always-on
-    memory link. After a compaction the server also lists the session's open tasks again, because compaction drops
+    what the agent needs once per conversation: who the person is, with their always-on memory link, and the
+    guide to the Vitty tools. After a compaction the server also lists the session's open tasks again, because compaction drops
     the workflow text it handed down. Claude Code skips `mcp_tool` hooks when a session launches (startup, and resume
     with `--resume` or `--continue`; its hooks docs, checked 13 Oct 2026), and Codex runs one only once the server
     is ready, so when no session-start call reached the server, the first message carries that text instead.
