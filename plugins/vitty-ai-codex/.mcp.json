@@ -2,7 +2,7 @@
   "mcpServers": {
     "vitty": {
       "type": "http",
-      "url": "https://gateway-130321581049.asia-south1.run.app/mcp",
+      "url": "https://api.vitty.ai/mcp",
       "tools": {
         "collaborate": {
           "output_token_limit": 50000
