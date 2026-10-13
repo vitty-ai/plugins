@@ -9,8 +9,10 @@
         "hooks": [ { "type": "command", "command": "node \"${PLUGIN_ROOT}/hooks/before-tool.mjs\"" } ] }
     ],
     "SessionStart": [
-      { "matcher": "compact", "hooks": [ { "type": "mcp_tool", "server": "vitty", "tool": "start",
-          "input": { "event": "compact", "session_id": "${session_id}", "folder": "${cwd}", "client": "codex" } } ] }
+      { "matcher": "startup|resume|clear|compact", "hooks": [
+        { "type": "command", "command": "node \"${PLUGIN_ROOT}/hooks/session-start.mjs\"", "timeout": 10 },
+        { "type": "mcp_tool", "server": "vitty", "tool": "start",
+          "input": { "event": "${source}", "session_id": "${session_id}", "folder": "${cwd}", "client": "codex" } } ] }
     ],
     "Stop": [
       { "hooks": [ { "type": "mcp_tool", "server": "vitty", "tool": "stop",

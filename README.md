@@ -1,8 +1,8 @@
 # Vitty plugins
 
 Claude Code and Codex plugins for Vitty staff. Each plugin connects your Claude Code or Codex
-to the Vitty server. Its hooks run `start` when you send a message (also one you type while the AI is
-working) and again after the conversation is compacted, and `stop` when the AI finishes its reply.
+to the Vitty server. Its hooks run `start` when a conversation starts, is resumed, cleared or compacted, and when
+you send a message (also one you type while the AI is working), and `stop` when the AI finishes its reply.
 The plugins hold no server code.
 
 - `plugins/vitty-ai-cc`: the Claude Code plugin
@@ -67,7 +67,7 @@ and run the add command again.
    Codex 0.152.0 or later is needed for the plugin's answer-size setting (`codex --version`).
 2. Start Codex, run `/plugins`, pick the `vitty-ai` marketplace and install **vitty-ai-codex**.
 3. Trust the plugin's hooks. Codex skips hooks that come with a plugin until you approve them. Run
-   `/hooks`, review the four Vitty hooks (two `start`, one `stop`, and one before each Vitty tool call that adds the session
+   `/hooks`, review the five Vitty hooks (two `start`, one that prints the guide at session start, one `stop`, and one before each Vitty tool call that adds the session
    and reads a plan file into `delegate`)
    and trust them. If a later update changes a hook, Codex asks you to review it again.
 4. Sign in: run `codex mcp login vitty`. Your browser opens Google; pick your `vitty.ai` account.
@@ -102,8 +102,15 @@ and run the add command again.
   return value is the hook output.
   - UserPromptSubmit runs `start` with the message. It also fires for a message typed while the AI is
     working (tested on Claude Code 2.1.291, 6 Oct 2026; Codex source).
-  - SessionStart with matcher `compact` runs `start` with `event: "compact"`: the server lists the
-    session's open tasks again, because compaction drops the workflow text it handed down.
+  - SessionStart, on startup, resume, clear and compact, runs two hooks. A command hook
+    (`hooks/session-start.mjs`) prints the guide to the Vitty tools, which the server serves with no sign-in at
+    `/mcp/agent-guide` (the address in `.mcp.json` plus `/agent-guide`); it is the same for everyone, and a command
+    hook runs at launch too, before the MCP connection exists. An `mcp_tool` hook runs `start` with the source as
+    `event`: the server sends who the person is and, after a compaction, the session's open tasks again, because
+    compaction drops the workflow text it handed down. Claude Code skips `mcp_tool` hooks when a session launches
+    (startup, and resume with `--resume` or `--continue`; its hooks docs, checked 13 Oct 2026), and Codex runs one
+    only once the server is ready, so when no session-start call reached the server, the first message carries who
+    the person is instead. UserPromptSubmit carries only what the message brings.
   - Stop runs `stop`. After a reply has gone to the person, it gives the working tasks' validations once a
     turn for the AI to run on that reply and report on, and again after a hand-in. It also holds after a
     compaction until each working task's workflow has been handed down again.
@@ -115,4 +122,4 @@ and run the add command again.
   plugin is not confirmed yet.
 - Bump the plugin `version` on every change, otherwise installed copies won't update.
 - Every staff member who installs a plugin can read all of its files, so never put keys or secrets here.
-- The server lives in `vitty-ai/mcp`. Staff don't need access to it.
+- The server lives in `vitty-ai/full-stack-engineer` (`backend/server`). Staff don't need access to it.
