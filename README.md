@@ -67,7 +67,7 @@ and run the add command again.
    Codex 0.152.0 or later is needed for the plugin's answer-size setting (`codex --version`).
 2. Start Codex, run `/plugins`, pick the `vitty-ai` marketplace and install **vitty-ai-codex**.
 3. Trust the plugin's hooks. Codex skips hooks that come with a plugin until you approve them. Run
-   `/hooks`, review the four Vitty hooks (two `start`, one `stop`, and one before each Vitty tool call that adds the session
+   `/hooks`, review the five Vitty hooks (two `start`, one that prints the guide at session start, one `stop`, and one before each Vitty tool call that adds the session
    and reads a plan file into `delegate`)
    and trust them. If a later update changes a hook, Codex asks you to review it again.
 4. Sign in: run `codex mcp login vitty`. Your browser opens Google; pick your `vitty.ai` account.
@@ -87,7 +87,7 @@ and run the add command again.
   desktop app signs in to an org-installed plugin's server only when the session's copy of the plugin has the same
   address as the org copy, and an env var on one machine made the two differ.
 - Before-tool hook: both plugins have one (`hooks/before-tool.mjs`, run with `node`) on retrieve, collaborate,
-  delegate, calibrate and submit_validation_result. It adds the host's `session_id` to every call, so the server
+  delegate and calibrate. It adds the host's `session_id` to every call, so the server
   knows the session and finds a task by its number in it; the server refuses a call without it (plugins before
   Claude Code 0.8.0 and Codex 0.9.0). Before `delegate`, when the agent hands in a plan as `plan_file` (a `.md` file
   inside the working folder), it also reads the file into `plan`, so the server stores the file's own words. One
@@ -102,15 +102,18 @@ and run the add command again.
   return value is the hook output.
   - UserPromptSubmit runs `start` with the message. It also fires for a message typed while the AI is
     working (tested on Claude Code 2.1.291, 6 Oct 2026; Codex source).
-  - SessionStart with matcher `startup|resume|clear|compact` runs `start` with the source as `event`. It carries
-    what the agent needs once per conversation: who the person is, with their always-on memory link, and the
-    guide to the Vitty tools. After a compaction the server also lists the session's open tasks again, because compaction drops
-    the workflow text it handed down. Claude Code skips `mcp_tool` hooks when a session launches (startup, and resume
-    with `--resume` or `--continue`; its hooks docs, checked 13 Oct 2026), and Codex runs one only once the server
-    is ready, so when no session-start call reached the server, the first message carries that text instead.
-    UserPromptSubmit carries only what the message brings.
-  - Stop runs `stop`. It holds the reply while a working task has a pending or failed check, and
-    after a compaction until each working task's workflow has been handed down again.
+  - SessionStart, on startup, resume, clear and compact, runs two hooks. A command hook
+    (`hooks/session-start.mjs`) prints the guide to the Vitty tools, which the server serves with no sign-in at
+    `/mcp/agent-guide` (the address in `.mcp.json` plus `/agent-guide`); it is the same for everyone, and a command
+    hook runs at launch too, before the MCP connection exists. An `mcp_tool` hook runs `start` with the source as
+    `event`: the server sends who the person is and, after a compaction, the session's open tasks again, because
+    compaction drops the workflow text it handed down. Claude Code skips `mcp_tool` hooks when a session launches
+    (startup, and resume with `--resume` or `--continue`; its hooks docs, checked 13 Oct 2026), and Codex runs one
+    only once the server is ready, so when no session-start call reached the server, the first message carries who
+    the person is instead. UserPromptSubmit carries only what the message brings.
+  - Stop runs `stop`. After a reply has gone to the person, it gives the working tasks' validations once a
+    turn for the AI to run on that reply and report on, and again after a hand-in. It also holds after a
+    compaction until each working task's workflow has been handed down again.
 - Sign-in: the server is its own OAuth sign-in service and sends the person to Google for the login. It
   accepts a verified Workspace address that is some staff member's email on the server. Claude Code and Codex
   register themselves, keep the tokens and send them on every call, hooks included, so the plugins carry no
