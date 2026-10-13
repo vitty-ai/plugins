@@ -5,7 +5,7 @@
           "input": { "message": "${prompt}", "session_id": "${session_id}", "folder": "${cwd}", "client": "codex" } } ] }
     ],
     "PreToolUse": [
-      { "matcher": "mcp__.*vitty.*__(retrieve|collaborate|delegate|calibrate)",
+      { "matcher": "mcp__.*vitty.*__(retrieve|collaborate|delegate|remember|calibrate)",
         "hooks": [ { "type": "command", "command": "node \"${PLUGIN_ROOT}/hooks/before-tool.mjs\"" } ] }
     ],
     "SessionStart": [
