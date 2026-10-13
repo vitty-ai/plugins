@@ -87,7 +87,7 @@ and run the add command again.
   desktop app signs in to an org-installed plugin's server only when the session's copy of the plugin has the same
   address as the org copy, and an env var on one machine made the two differ.
 - Before-tool hook: both plugins have one (`hooks/before-tool.mjs`, run with `node`) on retrieve, collaborate,
-  delegate, calibrate and submit_validation_result. It adds the host's `session_id` to every call, so the server
+  delegate and calibrate. It adds the host's `session_id` to every call, so the server
   knows the session and finds a task by its number in it; the server refuses a call without it (plugins before
   Claude Code 0.8.0 and Codex 0.9.0). Before `delegate`, when the agent hands in a plan as `plan_file` (a `.md` file
   inside the working folder), it also reads the file into `plan`, so the server stores the file's own words. One
@@ -104,8 +104,9 @@ and run the add command again.
     working (tested on Claude Code 2.1.291, 6 Oct 2026; Codex source).
   - SessionStart with matcher `compact` runs `start` with `event: "compact"`: the server lists the
     session's open tasks again, because compaction drops the workflow text it handed down.
-  - Stop runs `stop`. It holds the reply while a working task has a pending or failed check, and
-    after a compaction until each working task's workflow has been handed down again.
+  - Stop runs `stop`. After a reply has gone to the person, it gives the working tasks' validations once a
+    turn for the AI to run on that reply and report on, and again after a hand-in. It also holds after a
+    compaction until each working task's workflow has been handed down again.
 - Sign-in: the server is its own OAuth sign-in service and sends the person to Google for the login. It
   accepts a verified Workspace address that is some staff member's email on the server. Claude Code and Codex
   register themselves, keep the tokens and send them on every call, hooks included, so the plugins carry no
