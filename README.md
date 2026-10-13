@@ -1,8 +1,8 @@
 # Vitty plugins
 
 Claude Code and Codex plugins for Vitty staff. Each plugin connects your Claude Code or Codex
-to the Vitty server. Its hooks run `start` when you send a message (also one you type while the AI is
-working) and again after the conversation is compacted, and `stop` when the AI finishes its reply.
+to the Vitty server. Its hooks run `start` when a conversation starts, is resumed, cleared or compacted, and when
+you send a message (also one you type while the AI is working), and `stop` when the AI finishes its reply.
 The plugins hold no server code.
 
 - `plugins/vitty-ai-cc`: the Claude Code plugin
@@ -102,8 +102,13 @@ and run the add command again.
   return value is the hook output.
   - UserPromptSubmit runs `start` with the message. It also fires for a message typed while the AI is
     working (tested on Claude Code 2.1.291, 6 Oct 2026; Codex source).
-  - SessionStart with matcher `compact` runs `start` with `event: "compact"`: the server lists the
-    session's open tasks again, because compaction drops the workflow text it handed down.
+  - SessionStart with matcher `startup|resume|clear|compact` runs `start` with the source as `event`. It carries
+    what the agent needs once per conversation: who the person is, the guide to the Vitty tools and their always-on
+    memory link. After a compaction the server also lists the session's open tasks again, because compaction drops
+    the workflow text it handed down. Claude Code skips `mcp_tool` hooks when a session launches (startup, and resume
+    with `--resume` or `--continue`; its hooks docs, checked 13 Oct 2026), and Codex runs one only once the server
+    is ready, so when no session-start call reached the server, the first message carries that text instead.
+    UserPromptSubmit carries only what the message brings.
   - Stop runs `stop`. It holds the reply while a working task has a pending or failed check, and
     after a compaction until each working task's workflow has been handed down again.
 - Sign-in: the server is its own OAuth sign-in service and sends the person to Google for the login. It
@@ -114,4 +119,4 @@ and run the add command again.
   plugin is not confirmed yet.
 - Bump the plugin `version` on every change, otherwise installed copies won't update.
 - Every staff member who installs a plugin can read all of its files, so never put keys or secrets here.
-- The server lives in `vitty-ai/mcp`. Staff don't need access to it.
+- The server lives in `vitty-ai/full-stack-engineer` (`backend/server`). Staff don't need access to it.
