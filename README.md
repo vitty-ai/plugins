@@ -83,7 +83,7 @@ and run the add command again.
 ## For maintainers
 
 - Marketplaces: `.claude-plugin/marketplace.json` (Claude Code), `.agents/plugins/marketplace.json` (Codex).
-- Server URL: both plugins write the gateway's `/mcp` address in their `.mcp.json`, with no env var. The Claude
+- Server URL: both plugins write the server's `/mcp` address, `https://api.vitty.ai/mcp`, in their `.mcp.json`, with no env var. The Claude
   desktop app signs in to an org-installed plugin's server only when the session's copy of the plugin has the same
   address as the org copy, and an env var on one machine made the two differ.
 - Before-tool hook: both plugins have one (`hooks/before-tool.mjs`, run with `node`) on retrieve, collaborate,
