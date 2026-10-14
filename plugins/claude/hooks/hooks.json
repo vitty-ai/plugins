@@ -3,8 +3,8 @@
     "UserPromptSubmit": [
       { "hooks": [ { "type": "mcp_tool", "server": "plugin:vitty:vitty", "tool": "start",
           "input": { "message": "${prompt}", "session_id": "${session_id}", "folder": "${cwd}", "client": "claude-code" } } ] },
-      { "hooks": [ { "type": "mcp_tool", "server": "plugin:vitty:vitty", "tool": "always_remember",
-          "input": { "session_id": "${session_id}", "folder": "${cwd}", "client": "claude-code" } } ] }
+      { "hooks": [ { "type": "mcp_tool", "server": "plugin:vitty:vitty", "tool": "start",
+          "input": { "event": "user_memory", "session_id": "${session_id}", "folder": "${cwd}", "client": "claude-code" } } ] }
     ],
     "PreToolUse": [
       { "matcher": "mcp__.*vitty.*__(retrieve|register|create)",
