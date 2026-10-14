@@ -2,7 +2,8 @@
 
 Claude Code and Codex plugins for Vitty staff. Each plugin connects your Claude Code or Codex
 to the Vitty server. Its hooks run `start` when a conversation starts, is resumed, cleared or compacted, and when
-you send a message (also one you type while the AI is working), and `stop` when the AI finishes its reply.
+you send a message (also one you type while the AI is working), `always_remember` when you send a message, and `stop`
+when the AI finishes its reply.
 The plugins hold no server code.
 
 - `plugins/claude`: the Claude Code plugin. Its plugin name is `vitty` and its display name is **Claude (Vitty.AI)**.
@@ -67,7 +68,7 @@ and run the add command again.
    Codex 0.152.0 or later is needed for the plugin's answer-size setting (`codex --version`).
 2. Start Codex, run `/plugins`, pick the `vitty-ai` marketplace and install **Codex (Vitty.AI)**.
 3. Trust the plugin's hooks. Codex skips hooks that come with a plugin until you approve them. Run
-   `/hooks`, review the five Vitty hooks (two `start`, one that prints the guide at session start, one `stop`, and one before each Vitty tool call that adds the session)
+   `/hooks`, review the six Vitty hooks (two `start`, one `always_remember`, one that prints the guide at session start, one `stop`, and one before each Vitty tool call that adds the session)
    and trust them. If a later update changes a hook, Codex asks you to review it again.
 4. Sign in: run `codex mcp login vitty`. Your browser opens Google; pick your `vitty.ai` account.
    Codex keeps you signed in from then on.
@@ -103,8 +104,14 @@ and run the add command again.
   marks those tools with `anthropic/maxResultSizeChars`.
 - Both plugins use native `mcp_tool` hooks against the server in the plugin's `.mcp.json`. The tool's
   return value is the hook output.
-  - UserPromptSubmit runs `start` with the message. It also fires for a message typed while the AI is
-    working (tested on Claude Code 2.1.291, 6 Oct 2026; Codex source).
+  - UserPromptSubmit runs two hooks, which the hosts run in parallel, each with its own cap on the text it adds. It
+    also fires for a message typed while the AI is working (tested on Claude Code 2.1.291, 6 Oct 2026; Codex source).
+    - `start` with the message.
+    - `always_remember`, whose only job is the person's always-on memory: what they want remembered in every session.
+      The server sends it on the session's first message and on the first after each compaction, and nothing on any
+      other message, so the AI never has to fetch it. Text past a hook's cap (10,000 characters on Claude Code, 2,500
+      tokens on Codex, which an `mcp_tool` hook cannot raise) is saved by the host to a file the AI is shown the path
+      of; the agent guide tells it to read that file in full.
   - SessionStart, on startup, resume, clear and compact, runs two hooks. A command hook
     (`hooks/session-start.mjs`) prints the guide to the Vitty tools, which the server serves with no sign-in at
     `/mcp/agent-guide` (the address in `.mcp.json` plus `/agent-guide`); it is the same for everyone, and a command
@@ -113,7 +120,7 @@ and run the add command again.
     compaction drops the workflow text it handed down. Claude Code skips `mcp_tool` hooks when a session launches
     (startup, and resume with `--resume` or `--continue`; its hooks docs, checked 13 Oct 2026), and Codex runs one
     only once the server is ready, so when no session-start call reached the server, the first message carries who
-    the person is instead. UserPromptSubmit carries only what the message brings.
+    the person is instead. Otherwise `start` on UserPromptSubmit carries only what the message brings.
   - Stop runs `stop`. After a reply has gone to the person, it gives once a turn the validations of what was
     registered on the turn's tasks, for the AI to run on that reply and report on, then any post-validation
     steps. When nothing is left, the server reads the turn and closes the tasks whose goal is reached.

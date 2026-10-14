@@ -1,7 +1,7 @@
 {
   "name": "vitty",
-  "version": "0.11.1",
-  "description": "Vitty: company-wide policy hooks for Codex (calls Vitty's start and stop tools).",
+  "version": "0.12.0",
+  "description": "Vitty: company-wide policy hooks for Codex (calls Vitty's start, always_remember and stop tools).",
   "author": { "name": "Vitty" },
   "mcpServers": "./.mcp.json",
   "hooks": "./hooks/hooks.json",
