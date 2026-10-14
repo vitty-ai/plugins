@@ -1,6 +1,6 @@
 {
   "name": "vitty-ai-codex",
-  "version": "0.10.5",
+  "version": "0.11.0",
   "description": "Vitty: company-wide policy hooks for Codex (calls Vitty's start and stop tools).",
   "author": { "name": "Vitty" },
   "mcpServers": "./.mcp.json",

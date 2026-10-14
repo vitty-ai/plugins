@@ -121,7 +121,10 @@ and run the add command again.
   (Claude Code) or `codex mcp login vitty` (Codex). Whether `codex mcp login` reaches a server defined in a
   plugin is not confirmed yet.
 - Bump the plugin `version` on every change, otherwise installed copies won't update. Versions are x.y.z, and
-  both plugins keep the same x.y: a change to one plugin alone may bump only its z, and a change to x or y in either
-  plugin is made in both.
+  both plugins always have the same x.y.
+  - x or y: a change to what the plugins do, such as what a hook sends or when it runs. Both plugins get it, with
+    the same new x.y.
+  - z: a change only one host needs, such as Codex's `permissionDecision`, or a shared change that alters nothing a
+    hook sends or does, such as a comment or this README. Only the plugins it touches bump z.
 - Every staff member who installs a plugin can read all of its files, so never put keys or secrets here.
 - The server lives in `vitty-ai/full-stack-engineer` (`backend/server`). Staff don't need access to it.
