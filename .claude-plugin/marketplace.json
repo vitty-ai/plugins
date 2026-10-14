@@ -2,6 +2,6 @@
   "name": "vitty-ai",
   "owner": { "name": "Vitty" },
   "plugins": [
-    { "name": "vitty-ai-cc", "source": "./plugins/vitty-ai-cc", "description": "Vitty for Claude Code: company-wide policy hooks" }
+    { "name": "vitty", "source": "./plugins/claude", "description": "Vitty for Claude Code: company-wide policy hooks" }
   ]
 }

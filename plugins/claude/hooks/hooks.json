@@ -1,7 +1,7 @@
 {
   "hooks": {
     "UserPromptSubmit": [
-      { "hooks": [ { "type": "mcp_tool", "server": "plugin:vitty-ai-cc:vitty", "tool": "start",
+      { "hooks": [ { "type": "mcp_tool", "server": "plugin:vitty:vitty", "tool": "start",
           "input": { "message": "${prompt}", "session_id": "${session_id}", "folder": "${cwd}", "client": "claude-code" } } ] }
     ],
     "PreToolUse": [
@@ -11,11 +11,11 @@
     "SessionStart": [
       { "matcher": "startup|resume|clear|compact", "hooks": [
         { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/session-start.mjs\"", "timeout": 10 },
-        { "type": "mcp_tool", "server": "plugin:vitty-ai-cc:vitty", "tool": "start",
+        { "type": "mcp_tool", "server": "plugin:vitty:vitty", "tool": "start",
           "input": { "event": "${source}", "session_id": "${session_id}", "folder": "${cwd}", "client": "claude-code" } } ] }
     ],
     "Stop": [
-      { "hooks": [ { "type": "mcp_tool", "server": "plugin:vitty-ai-cc:vitty", "tool": "stop",
+      { "hooks": [ { "type": "mcp_tool", "server": "plugin:vitty:vitty", "tool": "stop",
           "input": { "message": "${last_assistant_message}", "session_id": "${session_id}", "client": "claude-code" } } ] }
     ]
   }
