@@ -107,9 +107,9 @@ and run the add command again.
     (startup, and resume with `--resume` or `--continue`; its hooks docs, checked 13 Oct 2026), and Codex runs one
     only once the server is ready, so when no session-start call reached the server, the first message carries who
     the person is instead. UserPromptSubmit carries only what the message brings.
-  - Stop runs `stop`. After a reply has gone to the person, it gives the working tasks' validations once a
-    turn for the AI to run on that reply and report on, and again after a hand-in. It also holds after a
-    compaction until each working task's workflow has been handed down again.
+  - Stop runs `stop`. After a reply has gone to the person, it gives once a turn the validations of what was
+    registered on the turn's tasks, for the AI to run on that reply and report on, then any post-validation
+    steps. When nothing is left, the server reads the turn and closes the tasks whose goal is reached.
 - Sign-in: the server is its own OAuth sign-in service and sends the person to Google for the login. It
   accepts a verified Workspace address that is some staff member's email on the server. Claude Code and Codex
   register themselves, keep the tokens and send them on every call, hooks included, so the plugins carry no
