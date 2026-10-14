@@ -9,6 +9,9 @@
         },
         "retrieve": {
           "output_token_limit": 50000
+        },
+        "create": {
+          "output_token_limit": 50000
         }
       }
     }

@@ -5,7 +5,7 @@
           "input": { "message": "${prompt}", "session_id": "${session_id}", "folder": "${cwd}", "client": "claude-code" } } ] }
     ],
     "PreToolUse": [
-      { "matcher": "mcp__.*vitty.*__(retrieve|register)",
+      { "matcher": "mcp__.*vitty.*__(retrieve|register|create)",
         "hooks": [ { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/before-tool.mjs\"" } ] }
     ],
     "SessionStart": [
