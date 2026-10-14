@@ -67,8 +67,7 @@ and run the add command again.
    Codex 0.152.0 or later is needed for the plugin's answer-size setting (`codex --version`).
 2. Start Codex, run `/plugins`, pick the `vitty-ai` marketplace and install **vitty-ai-codex**.
 3. Trust the plugin's hooks. Codex skips hooks that come with a plugin until you approve them. Run
-   `/hooks`, review the five Vitty hooks (two `start`, one that prints the guide at session start, one `stop`, and one before each Vitty tool call that adds the session
-   and reads a plan file into `delegate`)
+   `/hooks`, review the five Vitty hooks (two `start`, one that prints the guide at session start, one `stop`, and one before each Vitty tool call that adds the session)
    and trust them. If a later update changes a hook, Codex asks you to review it again.
 4. Sign in: run `codex mcp login vitty`. Your browser opens Google; pick your `vitty.ai` account.
    Codex keeps you signed in from then on.
@@ -86,16 +85,17 @@ and run the add command again.
 - Server URL: both plugins write the server's `/mcp` address, `https://api.vitty.ai/mcp`, in their `.mcp.json`, with no env var. The Claude
   desktop app signs in to an org-installed plugin's server only when the session's copy of the plugin has the same
   address as the org copy, and an env var on one machine made the two differ.
-- Before-tool hook: both plugins have one (`hooks/before-tool.mjs`, run with `node`) on retrieve, collaborate,
-  delegate and calibrate. It adds the host's `session_id` to every call, so the server
-  knows the session and finds a task by its number in it; the server refuses a call without it (plugins before
-  Claude Code 0.8.0 and Codex 0.9.0). Before `delegate`, when the agent hands in a plan as `plan_file` (a `.md` file
-  inside the working folder), it also reads the file into `plan`, so the server stores the file's own words. One
-  hook does both, since two hooks on one tool cannot both rewrite its input. Codex accepts a rewritten call only
-  with `permissionDecision: "allow"`, so its copy adds that, and Codex asks no permission for these tools; Claude
-  Code's does not, so its permission prompt stays.
+- Before-tool hook: both plugins have one (`hooks/before-tool.mjs`, run with `node`) on retrieve,
+  register and create. It adds the host's `session_id` to every call, so the server knows the session and finds a task by its
+  number in it; the server refuses a call without it (plugins before Claude Code 0.8.0 and Codex 0.9.0). Codex
+  accepts a rewritten call only with `permissionDecision: "allow"`, so its copy adds that, and Codex asks no
+  permission for these tools; Claude Code's does not, so its permission prompt stays.
+  It also adds `repositories`, the git repositories the device holds (`hooks/repositories.mjs`): the one the
+  session's folder is in, those one level inside that repository or folder, and its siblings, each as `owner/name`
+  from its `origin` remote, read from the git config files with no `git` process. A task for a repository the device
+  does not hold runs on the server.
 - Answer size: Codex cuts a tool's answer at about 10,000 tokens by default. The Codex plugin raises it to 50,000
-  tokens for `collaborate`, `delegate` and `retrieve` (`tools.<tool>.output_token_limit` in `.mcp.json`; Codex
+  tokens for `register`, `retrieve` and `create` (`tools.<tool>.output_token_limit` in `.mcp.json`; Codex
   0.152.0 or later; a person's own config can only lower it). Claude Code's limit is raised by the server, which
   marks those tools with `anthropic/maxResultSizeChars`.
 - Both plugins use native `mcp_tool` hooks against the server in the plugin's `.mcp.json`. The tool's
@@ -111,15 +111,20 @@ and run the add command again.
     (startup, and resume with `--resume` or `--continue`; its hooks docs, checked 13 Oct 2026), and Codex runs one
     only once the server is ready, so when no session-start call reached the server, the first message carries who
     the person is instead. UserPromptSubmit carries only what the message brings.
-  - Stop runs `stop`. After a reply has gone to the person, it gives the working tasks' validations once a
-    turn for the AI to run on that reply and report on, and again after a hand-in. It also holds after a
-    compaction until each working task's workflow has been handed down again.
+  - Stop runs `stop`. After a reply has gone to the person, it gives once a turn the validations of what was
+    registered on the turn's tasks, for the AI to run on that reply and report on, then any post-validation
+    steps. When nothing is left, the server reads the turn and closes the tasks whose goal is reached.
 - Sign-in: the server is its own OAuth sign-in service and sends the person to Google for the login. It
   accepts a verified Workspace address that is some staff member's email on the server. Claude Code and Codex
   register themselves, keep the tokens and send them on every call, hooks included, so the plugins carry no
   name, key or header. An mcp_tool hook never starts a sign-in: the person signs in once with `/mcp`
   (Claude Code) or `codex mcp login vitty` (Codex). Whether `codex mcp login` reaches a server defined in a
   plugin is not confirmed yet.
-- Bump the plugin `version` on every change, otherwise installed copies won't update.
+- Bump the plugin `version` on every change, otherwise installed copies won't update. Versions are x.y.z, and
+  both plugins always have the same x.y.
+  - x or y: a change to what the plugins do, such as what a hook sends or when it runs. Both plugins get it, with
+    the same new x.y.
+  - z: a change only one host needs, such as Codex's `permissionDecision`, or a shared change that alters nothing a
+    hook sends or does, such as a comment or this README. Only the plugins it touches bump z.
 - Every staff member who installs a plugin can read all of its files, so never put keys or secrets here.
 - The server lives in `vitty-ai/full-stack-engineer` (`backend/server`). Staff don't need access to it.
