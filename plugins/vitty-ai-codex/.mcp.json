@@ -4,10 +4,7 @@
       "type": "http",
       "url": "https://api.vitty.ai/mcp",
       "tools": {
-        "collaborate": {
-          "output_token_limit": 50000
-        },
-        "delegate": {
+        "register": {
           "output_token_limit": 50000
         },
         "retrieve": {
