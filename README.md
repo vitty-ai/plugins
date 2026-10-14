@@ -120,6 +120,7 @@ and run the add command again.
   name, key or header. An mcp_tool hook never starts a sign-in: the person signs in once with `/mcp`
   (Claude Code) or `codex mcp login vitty` (Codex). Whether `codex mcp login` reaches a server defined in a
   plugin is not confirmed yet.
-- Bump the plugin `version` on every change, otherwise installed copies won't update.
+- Bump the plugin `version` on every change, otherwise installed copies won't update. Both plugins share one
+  version: a change to either bumps both to the same number.
 - Every staff member who installs a plugin can read all of its files, so never put keys or secrets here.
 - The server lives in `vitty-ai/full-stack-engineer` (`backend/server`). Staff don't need access to it.
