@@ -5,8 +5,8 @@ to the Vitty server. Its hooks run `start` when a conversation starts, is resume
 you send a message (also one you type while the AI is working), and `stop` when the AI finishes its reply.
 The plugins hold no server code.
 
-- `plugins/claude`: the Claude Code plugin, `vitty`, shown as **Claude (Vitty.AI)**
-- `plugins/codex`: the Codex plugin, `vitty`, shown as **Codex (Vitty.AI)**
+- `plugins/claude`: the Claude Code plugin. Its plugin name is `vitty` and its display name is **Claude (Vitty.AI)**.
+- `plugins/codex`: the Codex plugin. Its plugin name is `vitty` and its display name is **Codex (Vitty.AI)**.
 
 ## Install
 
@@ -46,7 +46,7 @@ The plugins hold no server code.
    claude plugin list
    ```
 
-   `vitty@vitty-ai` should show `Status: ✔ enabled`.
+   It lists `vitty@vitty-ai` with `Status: ✔ enabled`.
 4. Turn on automatic updates: in a Claude Code session, run `/plugin`, open **Marketplaces**, select
    `vitty-ai`, and choose **Enable auto-update**.
 5. Sign in: in a Claude Code session, run `/mcp`, select `plugin:vitty:vitty` and choose
@@ -65,7 +65,7 @@ and run the add command again.
    ```
 
    Codex 0.152.0 or later is needed for the plugin's answer-size setting (`codex --version`).
-2. Start Codex, run `/plugins`, pick the `vitty-ai` marketplace and install **vitty** (shown as **Codex (Vitty.AI)**).
+2. Start Codex, run `/plugins`, pick the `vitty-ai` marketplace and install **Codex (Vitty.AI)**.
 3. Trust the plugin's hooks. Codex skips hooks that come with a plugin until you approve them. Run
    `/hooks`, review the five Vitty hooks (two `start`, one that prints the guide at session start, one `stop`, and one before each Vitty tool call that adds the session)
    and trust them. If a later update changes a hook, Codex asks you to review it again.
@@ -78,9 +78,9 @@ and run the add command again.
 - Claude Code: updates arrive on their own once auto-update is on. To update by hand, run
   `claude plugin marketplace update vitty-ai`.
 - Codex: run `codex plugin marketplace upgrade vitty-ai`.
-- Moving from the old names (`vitty-ai-cc`, `vitty-ai-codex`): remove the old plugin, then install and sign in
-  again as in 2 and 3. Claude Code: `claude plugin uninstall vitty-ai-cc@vitty-ai`. Codex: uninstall
-  **vitty-ai-codex** in `/plugins`.
+- Moving from the old plugin names `vitty-ai-cc` and `vitty-ai-codex` to `vitty`: uninstall the old plugin, then install and sign in again as sections 2 and 3 say.
+  - Claude Code: run `claude plugin uninstall vitty-ai-cc@vitty-ai`.
+  - Codex: uninstall **vitty-ai-codex** in `/plugins`.
 
 ## For maintainers
 
