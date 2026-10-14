@@ -90,6 +90,10 @@ and run the add command again.
   number in it; the server refuses a call without it (plugins before Claude Code 0.8.0 and Codex 0.9.0). Codex
   accepts a rewritten call only with `permissionDecision: "allow"`, so its copy adds that, and Codex asks no
   permission for these tools; Claude Code's does not, so its permission prompt stays.
+  It also adds `repositories`, the git repositories the device holds (`hooks/repositories.mjs`): the one the
+  session's folder is in, those one level inside that repository or folder, and its siblings, each as `owner/name`
+  from its `origin` remote, read from the git config files with no `git` process. A task for a repository the device
+  does not hold runs on the server.
 - Answer size: Codex cuts a tool's answer at about 10,000 tokens by default. The Codex plugin raises it to 50,000
   tokens for `register`, `retrieve` and `create` (`tools.<tool>.output_token_limit` in `.mcp.json`; Codex
   0.152.0 or later; a person's own config can only lower it). Claude Code's limit is raised by the server, which
