@@ -115,11 +115,12 @@ and run the add command again.
     (`hooks/session-start.mjs`) prints the guide to the Vitty tools, which the server serves with no sign-in at
     `/mcp/agent-guide` (the address in `.mcp.json` plus `/agent-guide`); it is the same for everyone, and a command
     hook runs at launch too, before the MCP connection exists. An `mcp_tool` hook runs `start` with the source as
-    `event`: the server sends who the person is and, after a compaction, the session's open tasks again, because
-    compaction drops the workflow text it handed down. Claude Code skips `mcp_tool` hooks when a session launches
-    (startup, and resume with `--resume` or `--continue`; its hooks docs, checked 13 Oct 2026), and Codex runs one
-    only once the server is ready, so when no session-start call reached the server, the first message carries who
-    the person is instead. Otherwise `start` on UserPromptSubmit carries only what the message brings.
+    `event`: the server records the session and any compaction, and after a compaction sends the session's open tasks
+    again, because compaction drops the workflow text it handed down and the AI may keep working before the person
+    writes. Who the person is goes with the session's first message and the first after each compaction, like the
+    user memory: Claude Code skips `mcp_tool` hooks when a session launches (startup, and resume with `--resume` or
+    `--continue`; its hooks docs, checked 13 Oct 2026), and Codex runs one only once the server is ready, so a
+    message is the one place every session reaches.
   - Stop runs `stop`. After a reply has gone to the person, it gives once a turn the validations of what was
     registered on the turn's tasks, for the AI to run on that reply and report on, then any post-validation
     steps. When nothing is left, the server reads the turn and closes the tasks whose goal is reached.
