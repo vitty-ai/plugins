@@ -1,7 +1,8 @@
 // Before the agent calls a Vitty tool: add the session id, so the server knows the session and finds the
 // task by its number in it, and the repositories this device holds, so the server knows which tasks only it can
-// run. Node built-ins only.
+// run. Before create, also: the text of the file the call names (create-file.mjs). Node built-ins only.
 import fs from 'node:fs';
+import { readFile } from './create-file.mjs';
 import { heldRepositories } from './repositories.mjs';
 
 const input = JSON.parse(fs.readFileSync(0, 'utf8'));
@@ -11,4 +12,11 @@ const args = {
   repositories: heldRepositories(input.cwd),
 };
 
+if (/__create$/.test(input.tool_name ?? '')) {
+  const why = readFile(args, input.cwd);
+  if (why) {
+    console.log(JSON.stringify({ hookSpecificOutput: { hookEventName: 'PreToolUse', permissionDecision: 'deny', permissionDecisionReason: why } }));
+    process.exit(0);
+  }
+}
 console.log(JSON.stringify({ hookSpecificOutput: { hookEventName: 'PreToolUse', updatedInput: args } }));
