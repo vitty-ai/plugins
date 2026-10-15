@@ -5,8 +5,8 @@ to the Vitty server. Its hooks run `start` when a conversation starts, is resume
 you send a message (also one you type while the AI is working), and `stop` when the AI finishes its reply.
 The plugins hold no server code.
 
-- `plugins/claude`: the Claude Code plugin. Its plugin name is `vitty` and its display name is **Claude (Vitty.AI)**.
-- `plugins/codex`: the Codex plugin. Its plugin name is `vitty` and its display name is **Codex (Vitty.AI)**.
+- `plugins/claude`: the Claude Code plugin. Its plugin name is `vitty` and its display name is **Vitty.ai**.
+- `plugins/codex`: the Codex plugin. Its plugin name is `vitty` and its display name is **Vitty.ai**.
 
 ## Install
 
@@ -65,7 +65,7 @@ and run the add command again.
    ```
 
    Codex 0.152.0 or later is needed for the plugin's answer-size setting (`codex --version`).
-2. Start Codex, run `/plugins`, pick the `vitty-ai` marketplace and install **Codex (Vitty.AI)**.
+2. Start Codex, run `/plugins`, pick the `vitty-ai` marketplace and install **Vitty.ai**.
 3. Trust the plugin's hooks. Codex skips hooks that come with a plugin until you approve them. Run
    `/hooks`, review the six Vitty hooks (three `start`, one that prints the guide at session start, one `stop`, and one before each Vitty tool call that adds the session)
    and trust them. If a later update changes a hook, Codex asks you to review it again.
