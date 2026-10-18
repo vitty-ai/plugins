@@ -1,7 +1,7 @@
 {
   "name": "vitty",
   "displayName": "Vitty.ai",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "description": "Vitty: company-wide policy hooks for Claude Code (calls Vitty's start and stop tools).",
   "author": { "name": "Vitty" }
 }
