@@ -3,6 +3,7 @@
     "vitty": {
       "type": "http",
       "url": "https://api.vitty.ai/mcp",
+      "tool_input_schema_max_bytes": 20000,
       "tools": {
         "register": {
           "output_token_limit": 50000
