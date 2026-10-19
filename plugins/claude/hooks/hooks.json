@@ -7,8 +7,10 @@
           "input": { "event": "user_memory", "session_id": "${session_id}", "folder": "${cwd}", "client": "claude-code" } } ] }
     ],
     "PreToolUse": [
-      { "matcher": "mcp__.*vitty.*__(retrieve|register|create)",
-        "hooks": [ { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/before-tool.mjs\"" } ] }
+      { "matcher": "mcp__.*vitty.*__(retrieve|register|create|sync)",
+        "hooks": [ { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/before-tool.mjs\"" } ] },
+      { "matcher": "^Bash$",
+        "hooks": [ { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/git-guard.mjs\"" } ] }
     ],
     "SessionStart": [
       { "matcher": "startup|resume|clear|compact", "hooks": [
