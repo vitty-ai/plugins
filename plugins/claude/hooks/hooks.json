@@ -13,6 +13,10 @@
       { "matcher": "^Bash$",
         "hooks": [ { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/git-guard.mjs\"" } ] }
     ],
+    "PostToolUse": [
+      { "matcher": "mcp__.*vitty.*__sync$",
+        "hooks": [ { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/sync-upload.mjs\"", "timeout": 3600 } ] }
+    ],
     "SessionStart": [
       { "matcher": "startup|resume|clear|compact", "hooks": [
         { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/git-refresh.mjs\"", "timeout": 30 },
