@@ -1,6 +1,6 @@
 // Before the agent calls a Vitty tool: add the session id, so the server knows the session and finds the
 // task by its number in it, and the repositories this device holds, so the server knows which tasks only it can
-// run. Before create, also: the text of the file the call names (create-file.mjs). Node built-ins only.
+// run. Before create, also: the text of the file or files the call names (create-file.mjs). Node built-ins only.
 import fs from 'node:fs';
 import { readFile } from './create-file.mjs';
 import { heldRepositories } from './repositories.mjs';
