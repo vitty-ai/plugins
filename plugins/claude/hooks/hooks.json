@@ -1,7 +1,7 @@
 {
   "hooks": {
     "UserPromptSubmit": [
-      { "hooks": [ { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/git-refresh.mjs\" fetch", "timeout": 5 } ] },
+      { "hooks": [ { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/git-refresh.mjs\"", "timeout": 30 } ] },
       { "hooks": [ { "type": "mcp_tool", "server": "plugin:vitty:vitty", "tool": "start",
           "input": { "message": "${prompt}", "session_id": "${session_id}", "folder": "${cwd}", "client": "claude-code" } } ] },
       { "hooks": [ { "type": "mcp_tool", "server": "plugin:vitty:vitty", "tool": "start",
@@ -14,9 +14,8 @@
         "hooks": [ { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/git-guard.mjs\"" } ] }
     ],
     "SessionStart": [
-      { "matcher": "startup", "hooks": [
-        { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/git-refresh.mjs\" start", "timeout": 40 } ] },
       { "matcher": "startup|resume|clear|compact", "hooks": [
+        { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/git-refresh.mjs\"", "timeout": 30 },
         { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/session-start.mjs\"", "timeout": 10 },
         { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/session-start.mjs\" definitions", "timeout": 10 },
         { "type": "mcp_tool", "server": "plugin:vitty:vitty", "tool": "start",
