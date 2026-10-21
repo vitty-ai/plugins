@@ -3,9 +3,11 @@
     "UserPromptSubmit": [
       { "hooks": [ { "type": "command", "command": "node \"${PLUGIN_ROOT}/hooks/git-refresh.mjs\"", "timeout": 30 } ] },
       { "hooks": [ { "type": "mcp_tool", "server": "vitty", "tool": "start",
-          "input": { "message": "${prompt}", "session_id": "${session_id}", "folder": "${cwd}", "client": "codex" } } ] },
+          "input": { "message": "${prompt}", "session_id": "${session_id}", "message_id": "${turn_id}", "folder": "${cwd}", "client": "codex" } } ] },
       { "hooks": [ { "type": "mcp_tool", "server": "vitty", "tool": "start",
-          "input": { "event": "user_memory", "session_id": "${session_id}", "folder": "${cwd}", "client": "codex" } } ] }
+          "input": { "event": "user_memory", "message": "${prompt}", "session_id": "${session_id}", "message_id": "${turn_id}", "folder": "${cwd}", "client": "codex" } } ] },
+      { "hooks": [ { "type": "mcp_tool", "server": "vitty", "tool": "start",
+          "input": { "event": "topical_memories_overview", "message": "${prompt}", "session_id": "${session_id}", "message_id": "${turn_id}", "folder": "${cwd}", "client": "codex" } } ] }
     ],
     "PreToolUse": [
       { "matcher": "mcp__.*vitty.*__(retrieve|register|create|sync)",
@@ -21,9 +23,10 @@
       { "matcher": "startup|resume|clear|compact", "hooks": [
         { "type": "command", "command": "node \"${PLUGIN_ROOT}/hooks/git-refresh.mjs\"", "timeout": 30 },
         { "type": "command", "command": "node \"${PLUGIN_ROOT}/hooks/session-start.mjs\"", "timeout": 10 },
-        { "type": "command", "command": "node \"${PLUGIN_ROOT}/hooks/session-start.mjs\" definitions", "timeout": 10 },
+        { "type": "command", "command": "node \"${PLUGIN_ROOT}/hooks/session-start.mjs\" definitions", "timeout": 10 } ] },
+      { "matcher": "compact", "hooks": [
         { "type": "mcp_tool", "server": "vitty", "tool": "start",
-          "input": { "event": "${source}", "session_id": "${session_id}", "folder": "${cwd}", "client": "codex" } } ] }
+          "input": { "event": "compact", "session_id": "${session_id}", "folder": "${cwd}", "client": "codex" } } ] }
     ],
     "Stop": [
       { "hooks": [ { "type": "mcp_tool", "server": "vitty", "tool": "stop",
