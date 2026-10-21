@@ -9,15 +9,20 @@ import path from 'node:path';
 const MOST_FOLDERS = 500;
 
 export function heldRepositories(folder) {
+  return [...heldFolders(folder).keys()].sort();
+}
+
+// The same repositories, each with the folder that holds it: the first found, in the order above.
+export function heldFolders(folder) {
   const start = path.resolve(folder || process.cwd());
   const base = repositoryRoot(start) ?? start;
   const places = [base, ...children(base), ...children(path.dirname(base))];
-  const found = new Set();
+  const found = new Map();
   for (const place of places) {
     const name = originName(place);
-    if (name) found.add(name);
+    if (name && !found.has(name)) found.set(name, place);
   }
-  return [...found].sort();
+  return found;
 }
 
 function repositoryRoot(folder) {
