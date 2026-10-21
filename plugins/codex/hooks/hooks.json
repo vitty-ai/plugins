@@ -17,7 +17,9 @@
     ],
     "PostToolUse": [
       { "matcher": "mcp__.*vitty.*__sync$",
-        "hooks": [ { "type": "command", "command": "node \"${PLUGIN_ROOT}/hooks/sync-upload.mjs\"", "timeout": 3600 } ] }
+        "hooks": [ { "type": "command", "command": "node \"${PLUGIN_ROOT}/hooks/sync-upload.mjs\"", "timeout": 3600 } ] },
+      { "matcher": "mcp__.*vitty.*__retrieve$",
+        "hooks": [ { "type": "command", "command": "node \"${PLUGIN_ROOT}/hooks/file-download.mjs\"", "timeout": 3600 } ] }
     ],
     "SessionStart": [
       { "matcher": "startup|resume|clear|compact", "hooks": [
