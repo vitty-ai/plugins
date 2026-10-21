@@ -1,7 +1,9 @@
 // Before the agent calls a Vitty tool: add the session id, so the server knows the session and finds the
 // task by its number in it, and the repositories this device holds, so the server knows which tasks only it can
 // run. Before create, also: the text of the file the call names (create-file.mjs). Before sync, refuse the call
-// when the device holds no repository around the session's folder, since there is nothing to sync. Node built-ins only.
+// when the device holds no repository around the session's folder, since there is nothing to sync. Inside a sub-agent,
+// register also gets the sub-agent's id, so what it registers is its own: its stop checks it, not the agent's. Node
+// built-ins only.
 import fs from 'node:fs';
 import { readFile } from './create-file.mjs';
 import { heldRepositories } from './repositories.mjs';
@@ -12,6 +14,8 @@ const args = {
   session_id: input.session_id ?? '',
   repositories: heldRepositories(input.cwd),
 };
+
+if (/__register$/.test(input.tool_name ?? '') && input.agent_id) args.agent_id = input.agent_id;
 
 const NOTHING_TO_SYNC =
   'Vitty: this folder, its subfolders and its siblings hold no git repository, so there is nothing to sync.';

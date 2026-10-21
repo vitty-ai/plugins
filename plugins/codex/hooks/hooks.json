@@ -33,6 +33,14 @@
     "Stop": [
       { "hooks": [ { "type": "mcp_tool", "server": "vitty", "tool": "stop",
           "input": { "message": "${last_assistant_message}", "session_id": "${session_id}", "client": "codex" } } ] }
+    ],
+    "SubagentStart": [
+      { "hooks": [ { "type": "mcp_tool", "server": "vitty", "tool": "start",
+          "input": { "event": "sub_agent", "session_id": "${session_id}", "agent_id": "${agent_id}", "message_id": "${turn_id}", "client": "codex" } } ] }
+    ],
+    "SubagentStop": [
+      { "hooks": [ { "type": "mcp_tool", "server": "vitty", "tool": "stop",
+          "input": { "message": "${last_assistant_message}", "session_id": "${session_id}", "agent_id": "${agent_id}", "client": "codex" } } ] }
     ]
   }
 }
