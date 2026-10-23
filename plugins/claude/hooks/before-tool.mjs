@@ -1,5 +1,5 @@
 // Before the agent calls a Vitty tool: add the session id, so the server knows the session and finds the
-// task by its number in it, and the repositories this device holds, so the server knows which tasks only it can
+// task by its id in it, and the repositories this device holds, so the server knows which tasks only it can
 // run. Before create, also: the text of the file the call names (create-file.mjs). Before sync, refuse the call
 // when the device holds no repository around the session's folder, since there is nothing to sync. Inside a sub-agent,
 // register also gets the sub-agent's id, so what it registers is its own: its stop checks it, not the agent's. Node
